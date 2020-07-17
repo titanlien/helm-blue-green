@@ -32,9 +32,9 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ . }}
+          - path: /{{ . }}
             backend:
-              serviceName: {{ $fullName }}-blue
+              serviceName: {{ $fullName }}-{{ . }}
               servicePort: {{ $svcPort }}
           {{- end }}
     {{- end }}
