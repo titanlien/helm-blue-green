@@ -50,7 +50,7 @@ serviceBlue:
 
 serviceGreen:
   type: ClusterIP
-  port: 8090
+  port: 8080
 
 ingress:
   enabled: true
