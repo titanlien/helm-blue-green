@@ -36,8 +36,6 @@ Common labels
 */}}
 {{- define "demo-helm.labels" -}}
 helm.sh/chart: {{ include "demo-helm.chart" . }}
-{{ include "demo-helm.selectorLabelsBlue" . }}
-{{ include "demo-helm.selectorLabelsGreen" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
