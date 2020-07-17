@@ -31,11 +31,20 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
+          {{- if eq (len .paths) 1}}
+          {{- range .paths }}
+          - path: /
+            backend:
+              serviceName: {{ $fullName }}-{{ . }}
+              servicePort: {{ $svcPort }}
+          {{- end }}
+          {{- else }}
           {{- range .paths }}
           - path: /{{ . }}
             backend:
               serviceName: {{ $fullName }}-{{ . }}
               servicePort: {{ $svcPort }}
+          {{- end }}
           {{- end }}
     {{- end }}
   {{- end }}
