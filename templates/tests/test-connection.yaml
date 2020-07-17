@@ -8,12 +8,20 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
+    {{- range $.Values.ingress.hosts }}
+    {{- if has "blue" .paths }}
     - name: wget-blue
       image: busybox
       command: ['wget']
-      args: ['{{ include "demo-helm.fullname" . }}-blue:{{ .Values.serviceBlue.port }}']
+      args: ['{{ include "demo-helm.fullname" $ }}-blue:{{ $.Values.serviceBlue.port }}']
+    {{- end}}
+    {{- end}}
+    {{- range $.Values.ingress.hosts }}
+    {{- if has "green" .paths }}
     - name: wget-green
       image: busybox
       command: ['wget']
-      args: ['{{ include "demo-helm.fullname" . }}-green:{{ .Values.serviceBlue.port }}']
+      args: ['{{ include "demo-helm.fullname" $ }}-green:{{ $.Values.serviceBlue.port }}']
+    {{- end}}
+    {{- end}}
   restartPolicy: Never

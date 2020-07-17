@@ -1,41 +1,43 @@
+{{ range .Values.ingress.hosts }}
+{{ if has "green" .paths }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "demo-helm.fullname" . }}-green
+  name: {{ include "demo-helm.fullname" $ }}-green
   labels:
-    {{- include "demo-helm.labels" . | nindent 4 }}
+    {{- include "demo-helm.labels" $ | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+{{- if not $.Values.autoscaling.enabled }}
+  replicas: {{ $.Values.replicaCount }}
 {{- end }}
   selector:
     matchLabels:
-      {{- include "demo-helm.selectorLabelsGreen" . | nindent 6 }}
+      {{- include "demo-helm.selectorLabelsGreen" $ | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+    {{- with $.Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $ | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "demo-helm.selectorLabelsGreen" . | nindent 8 }}
+        {{- include "demo-helm.selectorLabelsGreen" $ | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $ | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "demo-helm.serviceAccountName" . }}
+      serviceAccountName: {{ include "demo-helm.serviceAccountName" $ }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ $.Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.imageGreen.repository }}:{{ .Values.imageGreen.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.imageGreen.pullPolicy }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $.Values.imageGreen.repository }}:{{ $.Values.imageGreen.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.imageGreen.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.imageGreen.port }}
+              containerPort: {{ $.Values.imageGreen.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -46,16 +48,18 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml $.Values.resources | nindent 12 }}
+      {{- with $.Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $ | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with $.Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $ | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with $.Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml $ | nindent 8 }}
       {{- end }}
+{{ end }}
+{{ end }}

@@ -1,15 +1,19 @@
+{{ range .Values.ingress.hosts }}
+{{ if has "green" .paths }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "demo-helm.fullname" . }}-green
+  name: {{ include "demo-helm.fullname" $ }}-green
   labels:
-    {{- include "demo-helm.labels" . | nindent 4 }}
+    {{- include "demo-helm.labels" $ | nindent 4 }}
 spec:
-  type: {{ .Values.serviceGreen.type }}
+  type: {{ $.Values.serviceGreen.type }}
   ports:
-    - port: {{ .Values.serviceGreen.port }}
-      targetPort: {{ .Values.imageGreen.port }}
+    - port: {{ $.Values.serviceGreen.port }}
+      targetPort: {{ $.Values.imageGreen.port }}
       protocol: TCP
       name: http
   selector:
-    {{- include "demo-helm.selectorLabelsGreen" . | nindent 4 }}
+    {{- include "demo-helm.selectorLabelsGreen" $ | nindent 4 }}
+{{ end }}
+{{ end }}
