@@ -4,25 +4,32 @@
 
 replicaCount: 3
 
-image:
+imageBlue:
   repository: jocatalin/kubernetes-bootcamp
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1"
   port: 8080
 
+imageGreen:
+  repository: jocatalin/kubernetes-bootcamp
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v2"
+  port: 8080
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-#serviceAccount:
-#  # Specifies whether a service account should be created
-#  create: true
-#  # Annotations to add to the service account
-#  annotations: {}
-#  # The name of the service account to use.
-#  # If not set and create is true, a name is generated using the fullname template
-#  name: ""
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
 podAnnotations: {}
 
@@ -37,9 +44,13 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
+serviceBlue:
   type: ClusterIP
   port: 8080
+
+serviceGreen:
+  type: ClusterIP
+  port: 8090
 
 ingress:
   enabled: true
@@ -66,11 +77,11 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-#autoscaling:
-#  enabled: false
-#  minReplicas: 1
-#  maxReplicas: 3
-#  targetCPUUtilizationPercentage: 80
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}

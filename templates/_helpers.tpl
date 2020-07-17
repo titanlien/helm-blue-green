@@ -36,7 +36,8 @@ Common labels
 */}}
 {{- define "demo-helm.labels" -}}
 helm.sh/chart: {{ include "demo-helm.chart" . }}
-{{ include "demo-helm.selectorLabels" . }}
+{{ include "demo-helm.selectorLabelsBlue" . }}
+{{ include "demo-helm.selectorLabelsGreen" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -44,11 +45,19 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels - blue
 */}}
-{{- define "demo-helm.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "demo-helm.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{- define "demo-helm.selectorLabelsBlue" -}}
+app.kubernetes.io/name: {{ include "demo-helm.name" . }}-blue
+app.kubernetes.io/instance: {{ .Release.Name }}-blue
+{{- end }}
+
+{{/*
+Selector labels - green
+*/}}
+{{- define "demo-helm.selectorLabelsGreen" -}}
+app.kubernetes.io/name: {{ include "demo-helm.name" . }}-green
+app.kubernetes.io/instance: {{ .Release.Name }}-green
 {{- end }}
 
 {{/*

@@ -10,7 +10,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{- include "demo-helm.selectorLabels" . | nindent 6 }}
+      {{- include "demo-helm.selectorLabelsBlue" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "demo-helm.selectorLabels" . | nindent 8 }}
+        {{- include "demo-helm.selectorLabelsBlue" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -31,11 +31,11 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.imageBlue.repository }}:{{ .Values.imageBlue.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.imageBlue.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.image.port }}
+              containerPort: {{ .Values.imageBlue.port }}
               protocol: TCP
           livenessProbe:
             httpGet:

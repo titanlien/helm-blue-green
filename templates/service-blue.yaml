@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "demo-helm.fullname" . }}-blue
+  labels:
+    {{- include "demo-helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.serviceBlue.type }}
+  ports:
+    - port: {{ .Values.serviceBlue.port }}
+      targetPort: {{ .Values.imageBlue.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "demo-helm.selectorLabelsBlue" . | nindent 4 }}
