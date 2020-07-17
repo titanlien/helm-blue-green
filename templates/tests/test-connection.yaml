@@ -11,5 +11,5 @@ spec:
     - name: wget-blue
       image: busybox
       command: ['wget']
-      args: ['{{ include "demo-helm.fullname" . }}:{{ .Values.serviceBlue.port }}']
+      args: ['{{ include "demo-helm.fullname" . }}-blue:{{ .Values.serviceBlue.port }}']
   restartPolicy: Never
