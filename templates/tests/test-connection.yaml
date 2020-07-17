@@ -12,8 +12,4 @@ spec:
       image: busybox
       command: ['wget']
       args: ['{{ include "demo-helm.fullname" . }}:{{ .Values.serviceBlue.port }}']
-    - name: wget-green
-      image: busybox
-      command: ['wget']
-      args: ['{{ include "demo-helm.fullname" . }}:{{ .Values.serviceGreen.port }}']
   restartPolicy: Never
