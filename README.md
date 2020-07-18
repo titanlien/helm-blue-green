@@ -17,6 +17,9 @@
 |  _  |  __/ | | | | | |
 |_| |_|\___|_|_| |_| |_|
 ```
+# Workflow
+![Blue/Green](images/blue_green.png)
+
 # Prepare minikube
 ```bash
 $ minikube start --driver=hyperkit --kubernetes-version=latest --cpus 4 --memory 8192
