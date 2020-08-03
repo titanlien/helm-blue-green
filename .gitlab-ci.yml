@@ -1,0 +1,52 @@
+stages:
+  - build
+  - release
+  - deploy
+
+image: busybox:latest
+
+variables:
+  CONTAINER_TEST_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:lastest
+
+before_script:
+  - echo "Before script section"
+
+after_script:
+  - echo "After script section"
+
+.docker-default: &docker-default
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY
+
+docker-build:
+  stage: build
+  <<: *docker-default
+  script:
+    - docker build --pull --build-arg VERSION=$CI_COMMIT_REF_SLUG -t $CONTAINER_TEST_IMAGE ./app
+    - docker push $CONTAINER_TEST_IMAGE
+  except:
+    - master
+
+release-image:
+  stage: release
+  <<: *docker-default
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - merge_requests
+
+deploy:
+  stage: deploy
+  image: alpine/helm:latest
+  script:
+    - helm init --client-only
+    # TODO: not ready
+    #- helm --namespace $NAMESPACE upgrade -i $REPO_NAME --set image.tag=$TAG,env=$ENV,image.repository=$REPO_REGISTRY_URL $PATH_TO_VALUES
+  only:
+    - master
