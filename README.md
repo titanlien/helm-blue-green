@@ -18,7 +18,7 @@
 |_| |_|\___|_|_| |_| |_|
 ```
 # Workflow
-![Blue/Green](images/blue_green.png)
+![Blue/Green](helm/images/blue_green.png)
 
 # Prepare minikube
 ```bash
