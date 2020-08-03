@@ -1,5 +1,8 @@
 FROM node:12-slim
 
+ARG VERSION
+ENV VERSION=$VERSION
+
 # Create app directory
 WORKDIR /usr/src/app
 
