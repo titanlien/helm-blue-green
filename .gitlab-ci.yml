@@ -45,7 +45,8 @@ deploy:
   stage: deploy
   image: alpine/helm:latest
   script:
-    - helm init --client-only
+    - echo "skip"
+    #- helm init --client-only
     # TODO: not ready
     #- helm --namespace $NAMESPACE upgrade -i $REPO_NAME --set image.tag=$TAG,env=$ENV,image.repository=$REPO_REGISTRY_URL $PATH_TO_VALUES
   only:
