@@ -26,7 +26,7 @@ docker-build:
   except:
     - master
 
-blue_green_deploy:
+blue-green-deploy:
   stage: deploy
   image:
     name: alpine/helm:latest
@@ -37,17 +37,17 @@ blue_green_deploy:
   only:
     - merge_requests
 
-release-image:
-  stage: release
+update-prod-image:
+  stage: deploy
   <<: *docker-default
   script:
     - docker pull $CONTAINER_TEST_IMAGE
     - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_PROD_IMAGE
     - docker push $CONTAINER_PROD_IMAGE
   only:
-    - master
+    - /^v(\d+)\.(\d+)(\.\d+)?/
 
-prod_release:
+prod-release:
   stage: release
   image:
     name: alpine/helm:latest
@@ -56,4 +56,5 @@ prod_release:
     #- helm upgrade -i $HELM_RELEASE ./helm
     - helm template $HELM_RELEASE ./helm
   only:
+    - /^v(\d+)\.(\d+)(\.\d+)?/
     - master
