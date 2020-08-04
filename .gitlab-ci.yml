@@ -34,7 +34,8 @@ docker-build:
 
 blue_green_deploy:
   stage: deploy
-  image: alpine/helm:latest
+  image: 
+    name: alpine/helm:latest
     entrypoint: [""]
   script:
     #- helm init --client-only
