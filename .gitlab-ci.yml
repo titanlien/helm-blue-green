@@ -10,12 +10,6 @@ variables:
   CONTAINER_PROD_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:prod
   HELM_RELEASE: poc
 
-  #before_script:
-  #  - echo "Before script section"
-  #
-  #after_script:
-  #  - echo "After script section"
-
 .docker-default: &docker-default
   image: docker:latest
   services:
@@ -34,13 +28,12 @@ docker-build:
 
 blue_green_deploy:
   stage: deploy
-  image: 
+  image:
     name: alpine/helm:latest
     entrypoint: [""]
   script:
-    #- helm init --client-only
-    #- helm upgrade -i $HELM_RELEASE ./helm --set imageBlue.tag=$CI_COMMIT_REF_SLUG
-    - helm template $HELM_RELEASE ./helm --set imageBlue.tag=$CI_COMMIT_REF_SLUG
+    #- helm upgrade -i $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
+    - helm template $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
   only:
     - merge_requests
     - dev
