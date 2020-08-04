@@ -10,11 +10,11 @@ variables:
   CONTAINER_PROD_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:prod
   HELM_RELEASE: poc
 
-before_script:
-  - echo "Before script section"
-
-after_script:
-  - echo "After script section"
+  #before_script:
+  #  - echo "Before script section"
+  #
+  #after_script:
+  #  - echo "After script section"
 
 .docker-default: &docker-default
   image: docker:latest
