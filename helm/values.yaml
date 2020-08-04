@@ -8,14 +8,14 @@ imageBlue:
   repository: titanlien/web
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "lastest"
+  tag: "dev"
   port: 8080
 
 imageGreen:
   repository: titanlien/web
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "dev"
+  tag: "prod"
   port: 8080
 
 ingress:
