@@ -44,11 +44,11 @@ spec:
             backend:
               serviceName: {{ $fullName }}-{{ . }}
               servicePort: {{ $svcPort }}
+          {{- end }}
           - path: /
             backend:
-              serviceName: {{ $fullName }}-blue
+              serviceName: {{ $fullName }}-green
               servicePort: {{ $svcPort }}
-          {{- end }}
           {{- end }}
     {{- end }}
   {{- end }}

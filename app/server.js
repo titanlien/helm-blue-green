@@ -11,8 +11,8 @@ var version = process.env.VERSION;
 
 // App
 const app = express();
-app.get('/', (req, res) => {
-  res.send('Running on: ' + podname + " | ver:" + version);
+app.get('/*', (req, res) => {
+  res.send('Running on: ' + podname + " | ver:" + version + "\n");
 });
 
 app.listen(PORT, HOST);

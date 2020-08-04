@@ -2,20 +2,20 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 3
+replicaCount: 2
 
 imageBlue:
-  repository: jocatalin/kubernetes-bootcamp
+  repository: titanlien/web
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1"
+  tag: "dev"
   port: 8080
 
 imageGreen:
-  repository: jocatalin/kubernetes-bootcamp
+  repository: titanlien/web
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v2"
+  tag: "prod"
   port: 8080
 
 ingress:
@@ -26,7 +26,7 @@ ingress:
   hosts:
     - host: demo.local
       # only support blue and green two string
-      paths: [blue, green] 
+      paths: [green]
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

@@ -1,19 +1,14 @@
 stages:
   - build
-  - release
   - deploy
+  - release
 
 image: busybox:latest
 
 variables:
   CONTAINER_TEST_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:$CI_COMMIT_REF_SLUG
-  CONTAINER_RELEASE_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:lastest
-
-before_script:
-  - echo "Before script section"
-
-after_script:
-  - echo "After script section"
+  CONTAINER_PROD_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:prod
+  HELM_RELEASE: poc
 
 .docker-default: &docker-default
   image: docker:latest
@@ -31,23 +26,34 @@ docker-build:
   except:
     - master
 
+blue_green_deploy:
+  stage: deploy
+  image:
+    name: alpine/helm:latest
+    entrypoint: [""]
+  script:
+    #- helm upgrade -i $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
+    - helm template $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
+  only:
+    - merge_requests
+
 release-image:
   stage: release
   <<: *docker-default
   script:
     - docker pull $CONTAINER_TEST_IMAGE
-    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
-    - docker push $CONTAINER_RELEASE_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_PROD_IMAGE
+    - docker push $CONTAINER_PROD_IMAGE
   only:
-    - merge_requests
+    - master
 
-deploy:
-  stage: deploy
-  image: alpine/helm:latest
+prod_release:
+  stage: release
+  image:
+    name: alpine/helm:latest
+    entrypoint: [""]
   script:
-    - echo "skip"
-    #- helm init --client-only
-    # TODO: not ready
-    #- helm --namespace $NAMESPACE upgrade -i $REPO_NAME --set image.tag=$TAG,env=$ENV,image.repository=$REPO_REGISTRY_URL $PATH_TO_VALUES
+    #- helm upgrade -i $HELM_RELEASE ./helm
+    - helm template $HELM_RELEASE ./helm
   only:
     - master
