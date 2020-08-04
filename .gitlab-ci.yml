@@ -36,7 +36,6 @@ blue_green_deploy:
     - helm template $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
   only:
     - merge_requests
-    - dev
 
 release-image:
   stage: release
@@ -45,5 +44,16 @@ release-image:
     - docker pull $CONTAINER_TEST_IMAGE
     - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_PROD_IMAGE
     - docker push $CONTAINER_PROD_IMAGE
+  only:
+    - master
+
+prod_release:
+  stage: release
+  image:
+    name: alpine/helm:latest
+    entrypoint: [""]
+  script:
+    #- helm upgrade -i $HELM_RELEASE ./helm
+    - helm template $HELM_RELEASE ./helm
   only:
     - master
