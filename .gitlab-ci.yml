@@ -3,8 +3,6 @@ stages:
   - deploy
   - release
 
-image: busybox:latest
-
 variables:
   CONTAINER_TEST_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:$CI_COMMIT_REF_SLUG
   CONTAINER_PROD_IMAGE: $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/web:prod
@@ -36,6 +34,8 @@ blue-green-deploy:
     - helm template $HELM_RELEASE ./helm --set ingress.hosts[0].paths={'blue'\,'green'},imageBlue.tag=$CI_COMMIT_REF_SLUG
   only:
     - merge_requests
+  except:
+    - /^v(\d+)\.(\d+)(\.\d+)?$/
 
 update-prod-image:
   stage: deploy
@@ -45,7 +45,7 @@ update-prod-image:
     - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_PROD_IMAGE
     - docker push $CONTAINER_PROD_IMAGE
   only:
-    - /^v(\d+)\.(\d+)(\.\d+)?/
+    - /^v(\d+)\.(\d+)(\.\d+)?$/
 
 prod-release:
   stage: release
@@ -56,5 +56,5 @@ prod-release:
     #- helm upgrade -i $HELM_RELEASE ./helm
     - helm template $HELM_RELEASE ./helm
   only:
-    - /^v(\d+)\.(\d+)(\.\d+)?/
+    - /^v(\d+)\.(\d+)(\.\d+)?$/
     - master
