@@ -35,6 +35,7 @@ docker-build:
 blue_green_deploy:
   stage: deploy
   image: alpine/helm:latest
+    entrypoint: [""]
   script:
     #- helm init --client-only
     #- helm upgrade -i $HELM_RELEASE ./helm --set imageBlue.tag=$CI_COMMIT_REF_SLUG
